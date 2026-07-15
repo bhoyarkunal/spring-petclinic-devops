@@ -1,33 +1,20 @@
 pipeline {
-    agent any
-
-    tools {
-        jdk 'jdk21'
-        maven 'Maven'
+    agent (label 'SPC')
+    triggers{
+        pollSCM("* * * * *")
     }
-
     stages {
-
-        stage('Checkout') {
+        stage('git checkout'){
+            steps{
+                git url: 'https://github.com/bhoyarkunal/spring-petclinic-devops.git',
+                branch: 'main'
+            }
+        }
+        stage('build'){
             steps {
-                checkout scm
+                sh "mvn package"
             }
         }
 
-        stage('Build') {
-            steps {
-                sh './mvnw clean package -DskipTests'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Build Successful!'
-        }
-
-        failure {
-            echo 'Build Failed!'
-        }
     }
 }
