@@ -16,6 +16,19 @@ pipeline {
             }
         }
 
+        stage('Install Maven') {
+    steps {
+        sh '''
+            if ! command -v mvn >/dev/null 2>&1; then
+                sudo apt update
+                sudo apt install -y maven
+            fi
+
+            mvn -version
+        '''
+    }
+}
+
         stage('Scan') {
             steps {
                 withCredentials([string(credentialsId: 'sonar_12', variable: 'SONAR_TOKEN')]) {
