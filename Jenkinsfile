@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'SPC'
+        label 'JAVASPC'
     }
 
     triggers {
@@ -18,7 +18,7 @@ pipeline {
 
         stage('Scan') {
             steps {
-                withCredentials([string(credentialsId: 'ids_12', variable: 'SONAR_TOKEN')]) {
+                withCredentials([string(credentialsId: 'sonar_12', variable: 'SONAR_TOKEN')]) {
                     withSonarQubeEnv('SONAR') {
                         sh """
                             mvn clean verify sonar:sonar \
@@ -29,6 +29,23 @@ pipeline {
                         """
                     }
                 }
+            }
+        }
+
+        stage('upload binaryfile'){
+            steps{
+                    rtUpload(
+                        serverID: 'JFRONG_ID',
+                        spec: '''{
+                        "files":[
+                        {
+                        "pattern":"target/*.jar",
+                        "target": "javaspc/"
+                        }
+                        ]
+                        }'''
+                    )
+                   rtPublishBuildInfo(serverID:'JFRONG_ID') 
             }
         }
     }
