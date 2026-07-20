@@ -35,7 +35,7 @@ pipeline {
         stage('upload binaryfile'){
             steps{
                     rtUpload(
-                        serverID: 'JFRONG_ID',
+                        serverId: 'JFRONG_ID',
                         spec: '''{
                         "files":[
                         {
@@ -45,7 +45,7 @@ pipeline {
                         ]
                         }'''
                     )
-                   rtPublishBuildInfo(serverID:'JFRONG_ID') 
+                   rtPublishBuildInfo(serverId:'JFRONG_ID') 
             }
         }
     }
